@@ -1,0 +1,12 @@
+{% extends "base_layout.jinja2" -%}
+
+{% block content -%}
+    <h1><img src="{{request.static_url('brainbro:static/brainvisa.png')}}" alt="BrainVISA">BrainVISA in Browser</h1>
+    
+    {% for session in sessions -%}
+    <a href="{{session.url}}">Session {{session.number}}</a>
+    <a href="{{request.application_url}}/session/destroy/{{session.number}}"><button type="button" class="btn btn-primary" >Destroy</button></a>
+    <br>
+    {%- endfor %}
+    <a href="{{request.application_url}}/session/create"><button type="button" class="btn btn-primary" >Create session</button></a>
+{%- endblock %}
