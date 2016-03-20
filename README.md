@@ -18,4 +18,4 @@ ln -s ../../../src/brainbro lib/python2.7/site-packages/brainbro
 # created with virtualenv
 $base/brainbro/bin/pserve $base/brainbro/src/development.ini 
 ```
-Then visit [[http://localhost:6543]]
+Then visit [http://localhost:6543](http://localhost:6543 "Local Brainbro server")
