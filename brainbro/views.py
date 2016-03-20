@@ -17,10 +17,14 @@ from pyramid.security import (
 import paramiko
 
 from brainbro.users_and_groups import passwords
-from brainbro.sessions import (
-    get_user_sessions,
-    create_session,
-    destroy_session)
+from brainbro.sessions import SessionsManager
+
+_sessions_manager = None
+def get_sessions_manager():
+    global _sessions_manager
+    if _sessions_manager is None:
+        _sessions_manager = SessionsManager()
+    return _sessions_manager
 
 @view_config(route_name='login', renderer='templates/login.jinja2')
 @forbidden_view_config(renderer='templates/login.jinja2')
@@ -65,16 +69,19 @@ def logout(request):
 
 @view_config(route_name='home', renderer='templates/home.jinja2', permission='view_site')
 def home(request):
-    return {'sessions': get_user_sessions(request.authenticated_userid)}
+    sessions_manager = get_sessions_manager()
+    return {'sessions': sessions_manager.get_user_sessions(request.authenticated_userid)}
 
 @view_config(route_name='create_session', permission='view_site')
 def create_session_view(request):
-    create_session(request.authenticated_userid)
+    sessions_manager = get_sessions_manager()
+    sessions_manager.create_session(request.authenticated_userid)
     return HTTPFound(location = request.route_url('home'))
 
 @view_config(route_name='destroy_session', permission='view_site')
 def destroy_session_view(request):
     number = int(request.matchdict['session'])
-    destroy_session(number)
+    sessions_manager = get_sessions_manager()
+    sessions_manager.destroy_session(number)
     return HTTPFound(location = request.route_url('home'))
 
