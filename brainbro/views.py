@@ -43,7 +43,7 @@ def login(request):
         try:
             ssh = paramiko.SSHClient()
             ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            ssh.connect('127.0.0.1', username=login, password=password)
+            ssh.connect('127.0.0.1', username=login, password=password, allow_agent=False)
             headers = remember(request, login)
             passwords[login] = password
             return HTTPFound(location = came_from,
